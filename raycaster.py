@@ -247,6 +247,7 @@ def game_loop(clock, screen):
 
         # loop that goes over every x (vertical line)
         screen.fill((0, 0, 0))
+        draw_topdown(height,posX,posY,dirX,dirY)
         for x in range(screenWidth):
 
             # calculate camera x, the x coordinate on the camera plane that the current
@@ -260,6 +261,8 @@ def game_loop(clock, screen):
             # which box of the map we're in
             mapX = int(posX)
             mapY = int(posY)
+            map_ray_x = posX
+            map_ray_y = posY
 
             # length of the ray from current position to next x or y side
             sideDistX = 0.0  # (double)
@@ -280,8 +283,7 @@ def game_loop(clock, screen):
             # if the ray direction has a negative x-component, stepX will be -1. If it has a positive x-component,
             # it will be +1. If the x-component is 0 the value of stepX won't matter because it won't be used.
             # same for stepY
-            stepX = 0  # (int)
-            stepY = 0  # (int)
+            stepX = 0  # 
 
             hit = 0  # was there a wall hit?
             side = 0  # (int) was a vertical or horizontal wall hit?
@@ -311,10 +313,12 @@ def game_loop(clock, screen):
                 if (sideDistX < sideDistY):  # the ray is going morea horizontal than vertical
                     sideDistX += deltaDistX
                     mapX += stepX
+                    map_ray_x += stepX
                     side = 0
                 else:
                     sideDistY += deltaDistY
                     mapY += stepY
+                    map_ray_y += stepY
                     side = 1
                 # check if the ray has hit a wall
                 # if it is not 0, so the square does not contain a walkable square, so a wall
@@ -347,7 +351,8 @@ def game_loop(clock, screen):
             pygame.draw.line(screen, color, (x, int(drawStart)),
                             (x, int(drawEnd)), 1)
 
-        draw_topdown(height,posX,posY,dirX,dirY)
+            pygame.draw.line(screen, (255, 0, 0), (posX * height, posY * height + screenHeight), (mapX *height , mapY * height + screenHeight), 1)
+
 
         if moveForward:
             movePosX = int(posX + dirX * moveSpeed)  # x position to move to next
