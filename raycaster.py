@@ -8,8 +8,9 @@ from tkinter import *
 # constants
 mapWidth = 24
 mapHeight = 24
-screenWidth = 900 #640
-screenHeight = 600  #480
+screenWidth = 640
+screenHeight = 480
+
 
 # world map
 worldMap = [
@@ -46,7 +47,7 @@ pygame.init()
 pygame.font.init()
 
 # create the screen
-screen = pygame.display.set_mode((screenWidth, screenHeight))
+screen = pygame.display.set_mode((screenWidth, 2 * screenHeight))
 pygame.display.set_caption("Python Raycaster")
 
 # create game clock
@@ -67,6 +68,15 @@ def switch(number: int):
     }
     return switcher.get(number, pygame.Color("#ffff00"))  # default is yellow
 
+def switch_default_black(number: int):
+    switcher = {
+        1: (255, 0, 0),  # red
+        2: (0, 255, 0),  # green
+        3: (0, 0, 255),  # blue
+        4: (255, 255, 255),  # white
+        5: (255,255,0) # yellow
+    }
+    return switcher.get(number, pygame.Color("#000000"))  # default is yellow
 def stop():
     pygame.quit()
     quit()
@@ -133,6 +143,28 @@ def game_intro():
         pygame.display.update()
         clock.tick(30)
 
+def draw_topdown(size: int, posX: float, posY: float, dirX: float, dirY: float):
+    draw_y = screenHeight
+    draw_x = 0
+
+
+    for y in range(mapHeight):
+        for x in range(mapWidth):
+            square = worldMap[x][y]
+            # pygame.draw.rect(screen, color, (x,y,width,height), thickness)
+            pygame.draw.rect(screen, switch_default_black(square), (draw_x, draw_y, size, size), 0)
+            draw_x += size
+        draw_y += size
+        draw_x = 0
+    x_start = posX * size
+    y_start = posY * size + screenHeight
+    x_end = x_start + 2 * dirX
+    y_end = y_start + 2 * dirY
+    points  = [(x_start,y_start),(x_end,y_end ),(x_start+1,y_start+1),(x_end+1, y_end+1),(x_start-1,y_start-1),(x_end-1, y_end-1)]
+    pygame.draw.line(screen,(255, 255, 0),(x_start, y_start),(x_start + 10 * dirX, y_start + 10 * dirY), 2)
+    pygame.draw.lines(screen,(0, 255, 255),True,points,5)
+    
+
 def game_loop(clock, screen):
     """main game loop that runs the game.
 
@@ -149,6 +181,12 @@ def game_loop(clock, screen):
 
     planeX = 0.0  # 2d raycaster version of camera plane x
     planeY = 0.66  # 2d raycaster version of camera plane y
+
+    width = int(screenWidth / mapWidth)
+    print("width: ",width)
+    height = int(screenHeight / mapHeight)
+    print("heigth: ", height)
+    print("mapwidth: ", mapWidth)
 
     running = True
     rotateLeft = False
@@ -308,6 +346,8 @@ def game_loop(clock, screen):
 
             pygame.draw.line(screen, color, (x, int(drawStart)),
                             (x, int(drawEnd)), 1)
+
+        draw_topdown(height,posX,posY,dirX,dirY)
 
         if moveForward:
             movePosX = int(posX + dirX * moveSpeed)  # x position to move to next
