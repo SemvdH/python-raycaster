@@ -163,7 +163,7 @@ def game_loop(clock, screen):
     print("starting game...")
     while running:
 
-        # update the next frame at 30 fps
+        # update the next frame at 60 fps
         ms = clock.tick(60) / 1000.0
 
         moveSpeed = ms * 3.0
