@@ -10,3 +10,6 @@ Clone the repository by entering `git clone https://github.com/SemvdH/python-ray
 If you don't have pygame installed yet, you can install it using `pip install pygame`.
 
 Now you can run the raycaster by entering `python raycaster.py`
+
+## Usage
+The first version only has horizontal movement. You can move around using WASD and look left and right using the left and right arrow keys. You can press TAB for a debug mode, but that's only useful for developing things for the raycaster.
