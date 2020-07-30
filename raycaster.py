@@ -152,6 +152,7 @@ def draw_topdown(size: int, posX: float, posY: float, dirX: float, dirY: float):
         for x in range(mapWidth):
             square = worldMap[x][y]
             # pygame.draw.rect(screen, color, (x,y,width,height), thickness)
+            # draw the map
             pygame.draw.rect(screen, switch_default_black(square), (draw_x, draw_y, size, size), 0)
             draw_x += size
         draw_y += size
@@ -160,7 +161,9 @@ def draw_topdown(size: int, posX: float, posY: float, dirX: float, dirY: float):
     y_start = posY * size + screenHeight
     x_end = x_start + 2 * dirX
     y_end = y_start + 2 * dirY
+    # player
     points  = [(x_start,y_start),(x_end,y_end ),(x_start+1,y_start+1),(x_end+1, y_end+1),(x_start-1,y_start-1),(x_end-1, y_end-1)]
+    # direction
     pygame.draw.line(screen,(255, 255, 0),(x_start, y_start),(x_start + 10 * dirX, y_start + 10 * dirY), 2)
     pygame.draw.lines(screen,(0, 255, 255),True,points,5)
     
